@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { PatientProfile } from '../../patientprofile/entities/patientprofile.entity';
+import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne } from 'typeorm';
 
 export enum UserRole {
   Therapist = 'therapist',
@@ -28,4 +29,8 @@ export class User {
 
   @Column({ default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
+
+  @OneToOne(() => PatientProfile, { nullable: true, cascade: true })
+  @JoinColumn()
+  profile: PatientProfile | null;
 }
