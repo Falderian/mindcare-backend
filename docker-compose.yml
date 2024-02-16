@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    container_name: postgres-mindcare
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    ports:
+      - '${DB_PORT}:${DB_PORT}'
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mindcare
+    environment:
+      - PORT=${PORT}
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+    volumes:
+      - ./src:/app/src
+
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mindcare-test
+    environment:
+      - PORT=3000
+      - NODE_ENV=test
+      - DB_HOST=db
+      - DB_PORT=${DB_PORT}
+      - DB_USER=postgres
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=test_database
+    depends_on:
+      - db
+    volumes:
+      - ./src:/app/src
+
+volumes:
+  data: {}
