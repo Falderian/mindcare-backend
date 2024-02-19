@@ -1,7 +1,9 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { config } from 'dotenv';
 import { User } from '../users/entities/user.entity';
-import { PatientProfile } from '../patientprofile/entities/patientprofile.entity';
+import { Patient } from '../patients/entities/patient.entity';
+import { Task } from '../tasks/entities/task.entity';
+import { Note } from '../notes/entities/note.entity';
 
 config();
 
@@ -12,7 +14,7 @@ export const DBConfig = TypeOrmModule.forRoot({
   database: process.env.DB_NAME,
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  entities: [User, PatientProfile],
+  entities: [User, Patient, Note, Task],
   synchronize: true,
   autoLoadEntities: true,
 });

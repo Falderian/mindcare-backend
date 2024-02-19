@@ -4,14 +4,14 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from './entities/task.entity';
 import { Repository } from 'typeorm';
-import { PatientProfileService } from 'src/patientprofile/patientprofile.service';
+import { PatientsService } from '../patients/patients.service';
 
 @Injectable()
 export class TasksService {
   constructor(
     @InjectRepository(Task)
     private tasksRepository: Repository<Task>,
-    private patientsService: PatientProfileService,
+    private patientsService: PatientsService,
   ) {}
 
   async create(createTaskDto: CreateTaskDto) {

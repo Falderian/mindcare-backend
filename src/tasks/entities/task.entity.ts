@@ -1,13 +1,10 @@
-import { PatientProfile } from 'src/patientprofile/entities/patientprofile.entity';
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Patient } from '../../patients/entities/patient.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Task {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column()
-  patientId: number;
 
   @Column()
   description: string;
@@ -18,8 +15,8 @@ export class Task {
   @Column({ type: 'timestamptz' })
   dueDate: Date;
 
-  @ManyToOne(() => PatientProfile)
-  patient: PatientProfile;
+  @ManyToOne(() => Patient)
+  patient: Patient;
 
   @Column({ default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

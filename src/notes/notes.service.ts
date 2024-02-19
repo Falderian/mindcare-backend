@@ -4,14 +4,14 @@ import { UpdateNoteDto } from './dto/update-note.dto';
 import { Repository } from 'typeorm';
 import { Note } from './entities/note.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PatientProfileService } from '../patientprofile/patientprofile.service';
+import { PatientsService } from '../patients/patients.service';
 
 @Injectable()
 export class NotesService {
   constructor(
     @InjectRepository(Note)
     private notesRepository: Repository<Note>,
-    private patientsService: PatientProfileService,
+    private patientsService: PatientsService,
   ) {}
 
   async create(createNoteDto: CreateNoteDto) {

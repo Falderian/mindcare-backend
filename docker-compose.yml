@@ -15,6 +15,7 @@ services:
       - '${DB_PORT}:${DB_PORT}'
 
   app:
+    container_name: mindcare
     build:
       context: .
       dockerfile: Dockerfile
