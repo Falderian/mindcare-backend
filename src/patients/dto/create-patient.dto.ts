@@ -1,6 +1,6 @@
-import { IsDate, IsIn, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsIn, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class CreatePatientProfileDto {
+export class CreatePatientDto {
   @IsNotEmpty()
   @IsNumber()
   userId: number;

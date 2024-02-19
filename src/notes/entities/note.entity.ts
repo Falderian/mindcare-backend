@@ -1,4 +1,4 @@
-import { PatientProfile } from 'src/patientprofile/entities/patientprofile.entity';
+import { Patient } from '../../patients/entities/patient.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -18,6 +18,12 @@ export class Note {
   @Column()
   conclusion: string;
 
-  @ManyToOne(() => PatientProfile)
-  patient: PatientProfile;
+  @ManyToOne(() => Patient)
+  patient: Patient;
+
+  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @Column({ default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
+  updatedAt: Date;
 }
