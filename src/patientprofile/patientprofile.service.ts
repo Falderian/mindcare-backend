@@ -33,7 +33,7 @@ export class PatientProfileService {
   async findOne(id: number) {
     const profile = await this.profilesRepository.findOneBy({ id });
     if (!profile) {
-      throw new NotFoundException('Profile not found');
+      throw new NotFoundException('Patient Profile is not found');
     }
 
     return profile;
