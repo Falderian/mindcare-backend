@@ -8,7 +8,7 @@ services:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
-    container_name: postgres
+    container_name: postgres-mindcare
     volumes:
       - /home/projects/pgdata:/var/lib/postgresql/data
     ports:
@@ -18,12 +18,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: mindcare
-    environment:
-      - PORT=${PORT}
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
     ports:
       - '${SERVER_PORT}:${SERVER_PORT}'
-    depends_on:
-      - db
-    volumes:
-      - /home/projects/mindcare-backend:/app

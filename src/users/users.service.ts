@@ -12,15 +12,16 @@ export class UsersService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {}
-  async create(createUserDto: CreateUserDto) {
-    try {
-      const isAlreadyExists = await this.usersRepository.findOneBy({
-        email: createUserDto.email,
-      });
 
-      if (isAlreadyExists.email)
-        throw new NotAcceptableException('User with email = ' + createUserDto.email + ' is already exists');
-    } catch (error) {
+  async create(createUserDto: CreateUserDto) {
+    const isAlreadyExists = await this.usersRepository.findOneBy({
+      email: createUserDto.email,
+    });
+
+    if (isAlreadyExists?.email)
+      throw new NotAcceptableException('User with email = ' + createUserDto.email + ' is already exists');
+
+    try {
       const saltOrRounds = 10;
       const hashedPassword = await bcrypt.hash(createUserDto.password, saltOrRounds);
 
@@ -28,13 +29,12 @@ export class UsersService {
         ...createUserDto,
         password: hashedPassword,
       });
-      try {
-        const createdUser = await this.usersRepository.save(newUser);
-        delete createdUser.password;
-        return createdUser;
-      } catch (error) {
-        throw new BadRequestException(error).message;
-      }
+
+      const createdUser = await this.usersRepository.save(newUser);
+      delete createdUser.password;
+      return createdUser;
+    } catch (error) {
+      throw new BadRequestException(error).message;
     }
   }
 
