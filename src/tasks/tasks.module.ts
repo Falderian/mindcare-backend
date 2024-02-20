@@ -9,5 +9,6 @@ import { PatientsModule } from '../patients/patients.module';
   imports: [TypeOrmModule.forFeature([Task]), PatientsModule],
   controllers: [TasksController],
   providers: [TasksService],
+  exports: [TasksService],
 })
 export class TasksModule {}

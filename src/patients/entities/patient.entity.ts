@@ -18,6 +18,6 @@ export class Patient {
   @Column()
   phoneNumber: string;
 
-  @OneToMany(() => Note, (notes) => notes)
+  @OneToMany(() => Note, (notes) => notes, { cascade: true })
   notes: Note[];
 }

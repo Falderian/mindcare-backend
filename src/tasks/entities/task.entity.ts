@@ -15,7 +15,7 @@ export class Task {
   @Column({ type: 'timestamptz' })
   dueDate: Date;
 
-  @ManyToOne(() => Patient)
+  @ManyToOne(() => Patient, { nullable: true })
   patient: Patient;
 
   @Column({ default: () => 'CURRENT_TIMESTAMP' })

@@ -24,7 +24,8 @@ export class PatientsService {
     try {
       const newPatient = this.patientsRepository.create(createPatientDto);
       user.patient = newPatient;
-      return await this.usersRepository.save(user);
+      await this.usersRepository.save(user);
+      return newPatient;
     } catch (error) {
       throw new BadRequestException(error.message);
     }
@@ -52,8 +53,13 @@ export class PatientsService {
   async remove(id: number) {
     const patient = await this.findOne(id);
     try {
+      const user = await this.usersRepository.findOne({ where: { patient: patient } });
+      if (user) {
+        user.patient = null;
+        await this.usersRepository.save(user);
+      }
       await this.patientsRepository.remove(patient);
-      return `patient with id ${id} has been successfully removed`;
+      return `Patient with id ${id} has been successfully removed`;
     } catch (error) {
       throw new BadRequestException(error).message;
     }
