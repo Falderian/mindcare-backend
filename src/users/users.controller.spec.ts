@@ -1,56 +1,54 @@
-import * as request from 'supertest';
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppModule } from '../app.module';
-import { INestApplication } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
+import { User } from './entities/user.entity';
 import { UsersModule } from './users.module';
+import { UsersController } from './users.controller';
 import { DBConfig } from '../config/dg.config';
+describe('UsersController', () => {
+  let controller: UsersController;
+  let module: TestingModule;
+  let registeredUser: User;
+  const repo = TypeOrmModule.forFeature([User]);
 
-describe('UsersController (e2e)', () => {
-  let app: INestApplication;
+  const newUser = {
+    email: 'test@test.com',
+    password: (Math.random() * 100000).toFixed(),
+    name: 'test',
+  };
 
   beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [UsersModule, DBConfig],
+    module = await Test.createTestingModule({
+      imports: [DBConfig, repo, UsersModule],
+      controllers: [UsersController],
     }).compile();
 
-    app = moduleFixture.createNestApplication();
-    await app.init();
+    controller = module.get<UsersController>(UsersController);
   });
 
   afterAll(async () => {
-    await app.close();
+    module.get(DataSource).createQueryBuilder().delete().from(User).execute();
   });
 
-  it('/users (POST)', () => {
-    return request(app.getHttpServer())
-      .post('/users')
-      .send({
-        /* Provide test data for CreateUserDto */
-      })
-      .expect(201);
+  it('should register a user', async () => {
+    registeredUser = await controller.create(newUser);
+    expect(registeredUser.email).toBe(newUser.email);
+    expect(registeredUser.id).not.toBeNull();
   });
 
-  it('/users (GET)', () => {
-    return request(app.getHttpServer()).get('/users').expect(200);
+  it('should find one user by id', async () => {
+    const foundUser = await controller.findOne(registeredUser.id.toString());
+    expect(foundUser.email).toEqual(registeredUser.email);
   });
 
-  it('/users/:id (GET)', () => {
-    const userId = '1';
-    return request(app.getHttpServer()).get(`/users/${userId}`).expect(200);
+  it('should update a user', async () => {
+    const updatedUserData = { name: 'Updated Name' };
+    const updatedUser = await controller.update(registeredUser.id.toString(), updatedUserData);
+    expect(updatedUser.name).toBe(updatedUserData.name);
   });
 
-  it('/users/:id (PATCH)', () => {
-    const userId = '1';
-    return request(app.getHttpServer())
-      .patch(`/users/${userId}`)
-      .send({
-        /* Provide test data for UpdateUserDto */
-      })
-      .expect(200);
-  });
-
-  it('/users/:id (DELETE)', () => {
-    const userId = '1';
-    return request(app.getHttpServer()).delete(`/users/${userId}`).expect(200);
+  it('should remove a user', async () => {
+    const result = await controller.remove(registeredUser.id.toString());
+    expect(result).toBe(`User with id ${registeredUser.id} has been successfully removed`);
   });
 });

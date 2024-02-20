@@ -5,7 +5,7 @@ services:
     image: postgres
     restart: always
     environment:
-      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_DB=${DB_NAME_TEST}
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
     container_name: postgres-mindcare
@@ -14,7 +14,7 @@ services:
     ports:
       - '${DB_PORT}:${DB_PORT}'
 
-  app:
+  dev:
     container_name: mindcare
     build:
       context: .
@@ -24,3 +24,18 @@ services:
       - /usr/src/app/node_modules
     ports:
       - '${SERVER_PORT}:${SERVER_PORT}'
+    depends_on:
+      - db
+
+  test:
+    container_name: mindcare-test
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    environment:
+      - NODE_ENV=test
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - db

@@ -4,7 +4,7 @@ import { UpdateProgressAnalysisDto } from './dto/update-progress-analysis.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProgressAnalysis } from './entities/progress-analysis.entity';
 import { Repository } from 'typeorm';
-import { PatientsService } from 'src/patients/patients.service';
+import { PatientsService } from '../patients/patients.service';
 
 @Injectable()
 export class ProgressAnalysisService {

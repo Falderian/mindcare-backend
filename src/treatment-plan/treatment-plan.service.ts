@@ -4,7 +4,7 @@ import { UpdateTreatmentPlanDto } from './dto/update-treatment-plan.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TreatmentPlan } from './entities/treatment-plan.entity';
 import { Repository } from 'typeorm';
-import { PatientsService } from 'src/patients/patients.service';
+import { PatientsService } from '../patients/patients.service';
 
 @Injectable()
 export class TreatmentPlanService {
