@@ -1,4 +1,4 @@
-FROM node:20-alpine as dev
+FROM node:20-alpine as test
 
 WORKDIR /usr/src/app
 
@@ -6,8 +6,10 @@ COPY package*.json ./
 
 RUN npm install
 
+RUN npm install jest
+
 COPY . .
 
 EXPOSE 3000
 
-CMD ["npm", "run", "start:dev"]
+CMD ["npm", "run", "test:watch"]

@@ -1,5 +1,5 @@
-import { Patient } from 'src/patients/entities/patient.entity';
-import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Patient } from '../../patients/entities/patient.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class TreatmentPlan {
