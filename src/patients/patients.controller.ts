@@ -4,7 +4,7 @@ import { CreatePatientDto } from './dto/create-patient.dto';
 import { PatientsService } from './patients.service';
 
 @Controller('patients')
-export class PatientController {
+export class PatientsController {
   constructor(private readonly patientService: PatientsService) {}
 
   @Post()
