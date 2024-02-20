@@ -7,9 +7,19 @@ import { PatientsModule } from './patients/patients.module';
 import { NotesModule } from './notes/notes.module';
 import { TasksModule } from './tasks/tasks.module';
 import { TreatmentPlanModule } from './treatment-plan/treatment-plan.module';
+import { ProgressAnalysisModule } from './progress-analysis/progress-analysis.module';
 
 @Module({
-  imports: [DBConfig, UsersModule, AuthModule, PatientsModule, NotesModule, TasksModule, TreatmentPlanModule],
+  imports: [
+    DBConfig,
+    UsersModule,
+    AuthModule,
+    PatientsModule,
+    NotesModule,
+    TasksModule,
+    TreatmentPlanModule,
+    ProgressAnalysisModule,
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
