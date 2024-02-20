@@ -36,7 +36,7 @@ export class ProgressAnalysisService {
 
   async findOne(id: number) {
     try {
-      const analysis = await this.analysisesRepository.findBy({ id });
+      const analysis = await this.analysisesRepository.findOneBy({ id });
       return analysis;
     } catch (error) {
       throw new BadRequestException(error.message);
@@ -44,10 +44,10 @@ export class ProgressAnalysisService {
   }
 
   async update(id: number, updateProgressAnalysisDto: UpdateProgressAnalysisDto) {
+    const analysis = await this.findOne(id);
     try {
-      const analysis = await this.findOne(id);
-      const updatedNote = await this.analysisesRepository.save({ ...analysis, ...updateProgressAnalysisDto });
-      return updatedNote;
+      const updatedAnalysis = await this.analysisesRepository.save({ ...analysis, ...updateProgressAnalysisDto });
+      return updatedAnalysis;
     } catch (error) {
       throw new BadRequestException(error.message);
     }

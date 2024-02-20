@@ -13,9 +13,7 @@ export class LoggingMiddleware implements NestMiddleware {
       const { statusCode } = res;
       const contentLength = res.get('content-length');
 
-      this.logger.log(
-        `${method} ${originalUrl} ${statusCode} ${contentLength} - ${userAgent}`,
-      );
+      this.logger.log(`${method} ${originalUrl} ${statusCode} ${contentLength} - ${userAgent}`);
     });
 
     next();

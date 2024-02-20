@@ -1,16 +1,12 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TestingModule } from '@nestjs/testing';
 import { NotesController } from './notes.controller';
-import { NotesService } from './notes.service';
 import { Note } from './entities/note.entity';
 import { PatientsService } from '../patients/patients.service';
 import { Patient } from '../patients/entities/patient.entity';
-import { clearDatabase } from '../utils/utils';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { CreatePatientDto } from '../patients/dto/create-patient.dto';
-import { UsersService } from '../users/users.service';
 import { User } from '../users/entities/user.entity';
-import { DBConfig } from '../config/dg.config';
+import { setupTestingModule, createUser, clearDatabase } from '../utils/testUtils';
 
 describe('NotesController', () => {
   let controller: NotesController;
@@ -18,9 +14,6 @@ describe('NotesController', () => {
   let createdNote: Note;
   let user: User;
   let patient: Patient;
-  const userRepo = TypeOrmModule.forFeature([User]);
-  const patientRepo = TypeOrmModule.forFeature([Patient]);
-  const noteRepo = TypeOrmModule.forFeature([Note]);
 
   const newUser = {
     email: 'note@note.com',
@@ -46,20 +39,11 @@ describe('NotesController', () => {
   };
 
   beforeAll(async () => {
-    module = await Test.createTestingModule({
-      imports: [DBConfig, userRepo, noteRepo, patientRepo],
-      controllers: [NotesController],
-      providers: [NotesService, PatientsService, UsersService],
-    }).compile();
-
+    module = await setupTestingModule();
     controller = module.get<NotesController>(NotesController);
 
-    const userService = module.get<UsersService>(UsersService);
-    user = await userService.create(newUser);
-
-    const patientsService = module.get<PatientsService>(PatientsService);
-    patient = await patientsService.create({ ...createPatientDto, userId: user.id });
-
+    user = await createUser(module, newUser);
+    patient = await module.get<PatientsService>(PatientsService).create({ ...createPatientDto, userId: user.id });
     createNoteDto.patientId = patient.id;
   });
 

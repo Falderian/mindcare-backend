@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsNotEmpty, IsNumber, IsDate, MinDate, Validate } from 'class-validator';
+import { IsNotEmpty, IsNumber, Validate } from 'class-validator';
 
 export class CreateTreatmentPlanDto {
   @IsNumber()

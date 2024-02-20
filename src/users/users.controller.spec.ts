@@ -1,35 +1,28 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TestingModule } from '@nestjs/testing';
 import { User } from './entities/user.entity';
-import { UsersModule } from './users.module';
 import { UsersController } from './users.controller';
-import { DBConfig } from '../config/dg.config';
-import { clearDatabase } from '../utils/utils';
+import { clearDatabase, createUser, setupTestingModule } from '../utils/testUtils';
+
 describe('UsersController', () => {
   let controller: UsersController;
   let module: TestingModule;
   let registeredUser: User;
-  const repo = TypeOrmModule.forFeature([User]);
-
-  const newUser = {
-    email: 'user@user.com',
-    password: (Math.random() * 100000).toFixed(),
-    name: 'test',
-  };
 
   beforeAll(async () => {
-    module = await Test.createTestingModule({
-      imports: [DBConfig, repo, UsersModule],
-      controllers: [UsersController],
-    }).compile();
-
+    module = await setupTestingModule();
     controller = module.get<UsersController>(UsersController);
   });
 
   afterAll(async () => await clearDatabase(module));
 
   it('should register a user', async () => {
-    registeredUser = await controller.create(newUser);
+    const newUser = {
+      email: 'user@user.com',
+      password: (Math.random() * 100000).toFixed(),
+      name: 'test',
+    };
+
+    registeredUser = await createUser(module, newUser);
     expect(registeredUser.email).toBe(newUser.email);
     expect(registeredUser.id).not.toBeNull();
   });

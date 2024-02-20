@@ -1,15 +1,10 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Task } from './entities/task.entity';
-import { TasksModule } from './tasks.module';
+import { TestingModule } from '@nestjs/testing';
 import { TasksController } from './tasks.controller';
+import { Task } from './entities/task.entity';
 import { PatientsService } from '../patients/patients.service';
 import { Patient } from '../patients/entities/patient.entity';
-import { UsersService } from '../users/users.service';
-import { User } from '../users/entities/user.entity';
-import { DBConfig } from '../config/dg.config';
+import { setupTestingModule, createUser, clearDatabase } from '../utils/testUtils';
 import { CreateTaskDto } from './dto/create-task.dto';
-import { clearDatabase } from '../utils/utils';
 
 describe('TasksController', () => {
   let controller: TasksController;
@@ -17,13 +12,10 @@ describe('TasksController', () => {
   let registeredTask: Task;
   let createTaskDto: CreateTaskDto;
   let createdPatient: Patient;
-  const userRepo = TypeOrmModule.forFeature([User]);
-  const patientRepo = TypeOrmModule.forFeature([Patient]);
-  const taskRepo = TypeOrmModule.forFeature([Task]);
 
   const newUser = {
     email: 'task@task.com',
-    password: (Math.random() * 100000).toFixed(),
+    password: 'password',
     name: 'test',
     role: 'patient',
   };
@@ -36,19 +28,13 @@ describe('TasksController', () => {
   };
 
   beforeAll(async () => {
-    module = await Test.createTestingModule({
-      imports: [DBConfig, userRepo, patientRepo, taskRepo, TasksModule],
-      controllers: [TasksController],
-      providers: [PatientsService, UsersService],
-    }).compile();
-
+    module = await setupTestingModule();
     controller = module.get<TasksController>(TasksController);
 
-    const userService = module.get<UsersService>(UsersService);
-    const registeredUser = await userService.create(newUser);
+    const user = await createUser(module, newUser);
 
     const patientsService = module.get<PatientsService>(PatientsService);
-    createdPatient = await patientsService.create({ ...createPatientDto, userId: registeredUser.id });
+    createdPatient = await patientsService.create({ ...createPatientDto, userId: user.id });
 
     createTaskDto = {
       patientId: createdPatient.id,

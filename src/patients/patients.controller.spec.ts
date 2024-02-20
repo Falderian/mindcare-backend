@@ -1,19 +1,12 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TestingModule } from '@nestjs/testing';
+import { setupTestingModule, createUser, clearDatabase } from '../utils/testUtils';
 import { Patient } from './entities/patient.entity';
-import { PatientsModule } from './patients.module';
-import { PatientController } from './patients.controller';
-import { UsersService } from '../users/users.service';
-import { User } from '../users/entities/user.entity';
-import { DBConfig } from '../config/dg.config';
-import { clearDatabase } from '../utils/utils';
+import { PatientsController } from './patients.controller';
 
-describe('PatientController', () => {
-  let controller: PatientController;
+describe('PatientsController', () => {
+  let controller: PatientsController;
   let module: TestingModule;
   let registeredPatient: Patient;
-  const userRepo = TypeOrmModule.forFeature([User]);
-  const patientRepo = TypeOrmModule.forFeature([Patient]);
 
   const newUser = {
     email: 'patient@patient.com',
@@ -30,21 +23,14 @@ describe('PatientController', () => {
   };
 
   beforeAll(async () => {
-    module = await Test.createTestingModule({
-      imports: [DBConfig, patientRepo, userRepo, PatientsModule],
-      controllers: [PatientController],
-      providers: [UsersService],
-    }).compile();
-
-    controller = module.get<PatientController>(PatientController);
+    module = await setupTestingModule();
+    controller = module.get<PatientsController>(PatientsController);
   });
 
   afterAll(async () => await clearDatabase(module));
 
   it('should create a patient', async () => {
-    const userService = module.get<UsersService>(UsersService);
-    const registeredUser = await userService.create(newUser);
-
+    const registeredUser = await createUser(module, newUser);
     const patientDto = { ...createPatientDto, userId: registeredUser.id };
     registeredPatient = await controller.create(patientDto);
 

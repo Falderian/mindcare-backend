@@ -18,8 +18,8 @@ export class AuthService {
     const user = await this.usersRepository.findOneBy({ email });
     const isMatch = await bcrypt.compare(password, user.password);
     if (user && isMatch) {
-      const { password, ...result } = user;
-      return result;
+      delete user.password;
+      return user;
     }
     return null;
   }
