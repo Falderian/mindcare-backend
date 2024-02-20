@@ -56,8 +56,8 @@ export class TasksService {
 
   async remove(id: number) {
     try {
-      const note = await this.findOne(id);
-      await this.tasksRepository.remove(note);
+      const task = await this.findOne(id);
+      await this.tasksRepository.remove(task);
       return { message: 'Note removed successfully' };
     } catch (error) {
       throw new BadRequestException(error.message);

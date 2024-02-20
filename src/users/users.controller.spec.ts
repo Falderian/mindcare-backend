@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
 import { User } from './entities/user.entity';
 import { UsersModule } from './users.module';
 import { UsersController } from './users.controller';
 import { DBConfig } from '../config/dg.config';
+import { clearDatabase } from '../utils/utils';
 describe('UsersController', () => {
   let controller: UsersController;
   let module: TestingModule;
@@ -12,7 +12,7 @@ describe('UsersController', () => {
   const repo = TypeOrmModule.forFeature([User]);
 
   const newUser = {
-    email: 'test@test.com',
+    email: 'user@user.com',
     password: (Math.random() * 100000).toFixed(),
     name: 'test',
   };
@@ -26,9 +26,7 @@ describe('UsersController', () => {
     controller = module.get<UsersController>(UsersController);
   });
 
-  afterAll(async () => {
-    module.get(DataSource).createQueryBuilder().delete().from(User).execute();
-  });
+  afterAll(async () => await clearDatabase(module));
 
   it('should register a user', async () => {
     registeredUser = await controller.create(newUser);
