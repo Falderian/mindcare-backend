@@ -8,6 +8,7 @@ import { NotesModule } from './notes/notes.module';
 import { TasksModule } from './tasks/tasks.module';
 import { TreatmentPlanModule } from './treatment-plan/treatment-plan.module';
 import { ProgressAnalysisModule } from './progress-analysis/progress-analysis.module';
+import { ConsultationsModule } from './consultations/consultations.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ProgressAnalysisModule } from './progress-analysis/progress-analysis.mo
     TasksModule,
     TreatmentPlanModule,
     ProgressAnalysisModule,
+    ConsultationsModule,
   ],
 })
 export class AppModule implements NestModule {
