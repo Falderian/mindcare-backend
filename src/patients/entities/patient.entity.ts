@@ -2,6 +2,7 @@ import { TreatmentPlan } from '../../treatment-plan/entities/treatment-plan.enti
 import { Note } from '../../notes/entities/note.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Task } from '../../tasks/entities/task.entity';
+import { Consultation } from '../../consultations/entities/consultation.entity';
 
 @Entity()
 export class Patient {
@@ -28,4 +29,7 @@ export class Patient {
 
   @OneToMany(() => Task, (tasks) => tasks, { cascade: true })
   tasks: Task[];
+
+  @OneToMany(() => Consultation, (consultations) => consultations, { cascade: true })
+  consultations: Consultation[];
 }
