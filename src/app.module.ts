@@ -9,8 +9,8 @@ import { TasksModule } from './tasks/tasks.module';
 import { TreatmentPlanModule } from './treatment-plan/treatment-plan.module';
 import { ProgressAnalysisModule } from './progress-analysis/progress-analysis.module';
 import { ConsultationsModule } from './consultations/consultations.module';
-import { ChatModule } from './chat/chat.module';
 import { MessagesModule } from './messages/messages.module';
+import { MailboxModule } from './mailbox/mailbox.module';
 
 @Module({
   imports: [
@@ -23,8 +23,8 @@ import { MessagesModule } from './messages/messages.module';
     TreatmentPlanModule,
     ProgressAnalysisModule,
     ConsultationsModule,
-    ChatModule,
     MessagesModule,
+    MailboxModule,
   ],
 })
 export class AppModule implements NestModule {

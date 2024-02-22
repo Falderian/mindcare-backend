@@ -1,5 +1,4 @@
-import { Chat } from 'src/chat/entities/chat.entity';
-import { User } from 'src/users/entities/user.entity';
+import { Mailbox } from 'src/mailbox/entities/mailbox.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -8,16 +7,16 @@ export class Message {
   id: number;
 
   @Column()
-  sender: number;
+  senderId: number;
 
   @Column()
-  recipient: number;
+  recipientId: number;
 
   @Column()
   content: string;
 
-  @ManyToOne(() => Chat, (chat) => chat.messages)
-  chat: Chat;
+  @ManyToOne(() => Mailbox, (mailbox) => mailbox.messages, { nullable: true })
+  mailbox: Mailbox;
 
   @Column({ default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

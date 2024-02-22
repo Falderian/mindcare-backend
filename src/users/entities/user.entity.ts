@@ -1,3 +1,4 @@
+import { Mailbox } from 'src/mailbox/entities/mailbox.entity';
 import { Patient } from '../../patients/entities/patient.entity';
 import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne, JoinTable, ManyToMany } from 'typeorm';
 
@@ -33,4 +34,8 @@ export class User {
   @OneToOne(() => Patient, { nullable: true, cascade: true })
   @JoinColumn()
   patient: Patient | null;
+
+  @OneToOne(() => Mailbox, { nullable: false, cascade: true })
+  @JoinColumn()
+  mailbox: Mailbox;
 }
