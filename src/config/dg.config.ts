@@ -7,6 +7,7 @@ import { Task } from '../tasks/entities/task.entity';
 import { TreatmentPlan } from '../treatment-plan/entities/treatment-plan.entity';
 import { User } from '../users/entities/user.entity';
 import { Consultation } from '../consultations/entities/consultation.entity';
+import { Message } from '../messages/entities/message.entity';
 
 config();
 
@@ -19,7 +20,7 @@ export const DBConfig = TypeOrmModule.forRoot({
   database,
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  entities: [User, Patient, Note, Task, ProgressAnalysis, TreatmentPlan, Consultation],
+  entities: [User, Patient, Note, Task, ProgressAnalysis, TreatmentPlan, Consultation, Message],
   synchronize: true,
   autoLoadEntities: true,
 });

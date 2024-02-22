@@ -1,18 +1,25 @@
+import { Message } from '../../messages/entities/message.entity';
 import { User } from '../../users/entities/user.entity';
-import { Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable, Column, OneToMany, Index } from 'typeorm';
 
 @Entity()
+@Index(['senderId', 'recipientId'], { unique: true })
 export class Chat {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToMany(() => User, (user) => user.chats)
-  @JoinTable()
-  users: User[];
+  @Column()
+  senderId: number;
 
-  @Column({ default: 1 })
-  user1Order: number;
+  @Column()
+  recipientId: number;
 
-  @Column({ default: 2 })
-  user2Order: number;
+  @OneToMany(() => Message, (messages) => messages, { cascade: true })
+  messages: Message[];
+
+  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @Column({ default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
+  updatedAt: Date;
 }

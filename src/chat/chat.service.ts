@@ -2,7 +2,8 @@ import { BadRequestException, Injectable, NotAcceptableException } from '@nestjs
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Chat } from './entities/chat.entity';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from '../users/users.service';
+import { CreateChatDto } from './dto/create-chat.dto';
 
 @Injectable()
 export class ChatService {
@@ -12,31 +13,30 @@ export class ChatService {
     private usersService: UsersService,
   ) {}
 
-  async createPrivateChat(usersId: number[]) {
-    const isExistUsers = usersId.map(async (userId) => (await this.usersService.findOne(userId)).id);
+  async create(createChatDto: CreateChatDto) {
+    const usersId = [createChatDto.recipientId, createChatDto.senderId];
+    const isExists = await this.findChat(usersId);
+    if (isExists) return isExists;
     try {
-      const isChatExists = await this.findOneByUsers(usersId);
-      console.log(isChatExists);
-      if (isChatExists) throw new NotAcceptableException('The chat for this users is already exists');
-      const sortedUsersId = this.sortIds(usersId);
-
-      // const newChat = await this.chatRepository.save({ usersId: sortedUsersId });
-      // return newChat;
+      const newChat = await this.chatRepository.save(this.sortedUsersId(usersId));
+      return newChat;
     } catch (error) {
       throw new BadRequestException(error).message;
     }
   }
 
-  async findOneByUsers(usersId: number[]) {
+  async findChat(usersId: number[]) {
     try {
-      const sortedUsersId = this.sortIds(usersId);
-      const queryBuilder = this.chatRepository.createQueryBuilder('chat');
-      queryBuilder.where(`ARRAY[:...userIds] <@ chat.usersId`, { userIds: sortedUsersId });
-      return await queryBuilder.getOne();
+      const usersPayload = this.sortedUsersId(usersId);
+      const chat = await this.chatRepository.findOne({ where: usersPayload });
+      return chat;
     } catch (error) {
-      throw new BadRequestException(error.message);
+      throw new BadRequestException(error).message;
     }
   }
 
-  private sortIds = (usersId: number[]) => usersId.sort((a, b) => a - b);
+  private sortedUsersId = (usersId: number[]) => {
+    const sorted = usersId.sort((a, b) => a - b);
+    return { recipientId: sorted[0], senderId: sorted[1] };
+  };
 }
