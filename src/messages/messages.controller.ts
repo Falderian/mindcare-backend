@@ -12,11 +12,6 @@ export class MessagesController {
     return this.messagesService.create(createMessageDto);
   }
 
-  @Get()
-  findAll() {
-    return this.messagesService.findAll();
-  }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.messagesService.findOne(+id);

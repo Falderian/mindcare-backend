@@ -27,10 +27,6 @@ export class MessagesService {
     }
   }
 
-  findAll() {
-    return `This action returns all messages`;
-  }
-
   findOne(id: number) {
     return `This action returns a #${id} message`;
   }
