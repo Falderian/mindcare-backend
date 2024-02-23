@@ -1,12 +1,12 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { MessagesService } from './messages.service';
 import { MessagesController } from './messages.controller';
-import { UsersModule } from '../users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Message } from './entities/message.entity';
+import { MailboxModule } from '../mailbox/mailbox.module';
 
 @Module({
-  imports: [UsersModule, TypeOrmModule.forFeature([Message])],
+  imports: [TypeOrmModule.forFeature([Message]), MailboxModule],
   controllers: [MessagesController],
   providers: [MessagesService],
   exports: [MessagesService],

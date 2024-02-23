@@ -1,20 +1,31 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
-import { UsersService } from 'src/users/users.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Message } from './entities/message.entity';
 import { Repository } from 'typeorm';
+import { MailboxService } from '../mailbox/mailbox.service';
 
 @Injectable()
 export class MessagesService {
   constructor(
     @InjectRepository(Message)
     private messagesRepo: Repository<Message>,
-    private usersService: UsersService,
+    private mailboxService: MailboxService,
   ) {}
 
-  async create(createMessageDto: CreateMessageDto) {}
+  async create(createMessageDto: CreateMessageDto) {
+    const mailbox = await this.mailboxService.findByUser(createMessageDto.recipientId);
+    try {
+      const message = await this.messagesRepo.save({
+        mailbox,
+        ...createMessageDto,
+      });
+      return message;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
 
   findAll() {
     return `This action returns all messages`;

@@ -3,19 +3,9 @@ import { MailboxService } from './mailbox.service';
 import { CreateMailboxDto } from './dto/create-mailbox.dto';
 import { UpdateMailboxDto } from './dto/update-mailbox.dto';
 
-@Controller('mailbox')
+@Controller('mailboxes')
 export class MailboxController {
   constructor(private readonly mailboxService: MailboxService) {}
-
-  @Post()
-  create(@Body() createMailboxDto: CreateMailboxDto) {
-    return this.mailboxService.create(createMailboxDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.mailboxService.findAll();
-  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
