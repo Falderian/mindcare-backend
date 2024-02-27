@@ -9,7 +9,6 @@ import { TasksModule } from './tasks/tasks.module';
 import { TreatmentPlanModule } from './treatment-plan/treatment-plan.module';
 import { ProgressAnalysisModule } from './progress-analysis/progress-analysis.module';
 import { ConsultationsModule } from './consultations/consultations.module';
-import { ChatModule } from './chat/chat.module';
 import { PaymentsModule } from './payments/payments.module';
 
 @Module({
@@ -23,7 +22,6 @@ import { PaymentsModule } from './payments/payments.module';
     TreatmentPlanModule,
     ProgressAnalysisModule,
     ConsultationsModule,
-    ChatModule,
     PaymentsModule,
   ],
 })
