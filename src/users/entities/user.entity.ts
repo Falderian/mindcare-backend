@@ -1,5 +1,6 @@
+import { Chat } from '../../chats/entities/chat.entity';
 import { Patient } from '../../patients/entities/patient.entity';
-import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne, ManyToMany } from 'typeorm';
 
 export enum UserRole {
   Therapist = 'therapist',
@@ -33,4 +34,7 @@ export class User {
   @OneToOne(() => Patient, { nullable: true, cascade: true })
   @JoinColumn()
   patient: Patient | null;
+
+  @ManyToMany(() => Chat, (chat) => chat.users, { cascade: true })
+  chats: Chat[];
 }

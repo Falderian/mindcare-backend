@@ -1,3 +1,4 @@
+import { Chat } from 'src/chats/entities/chat.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -22,4 +23,7 @@ export class Message {
 
   @Column({ default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
+
+  @ManyToOne(() => Chat, (chat) => chat.messages)
+  chat: Chat;
 }

@@ -10,6 +10,8 @@ import { TreatmentPlanModule } from './treatment-plan/treatment-plan.module';
 import { ProgressAnalysisModule } from './progress-analysis/progress-analysis.module';
 import { ConsultationsModule } from './consultations/consultations.module';
 import { MessagesModule } from './messages/messages.module';
+import { ChatsGateway } from './chats/chats.gateway';
+import { ChatsModule } from './chats/chats.module';
 
 @Module({
   imports: [
@@ -23,7 +25,9 @@ import { MessagesModule } from './messages/messages.module';
     ProgressAnalysisModule,
     ConsultationsModule,
     MessagesModule,
+    ChatsModule,
   ],
+  providers: [ChatsGateway],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

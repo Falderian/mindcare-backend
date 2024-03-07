@@ -55,6 +55,10 @@ export class UsersService {
     return user;
   }
 
+  async findManyUsers(ids: number[]) {
+    return await Promise.all(ids.map((userId) => this.findOne(userId)));
+  }
+
   async update(id: number, updateUserDto: UpdateUserDto) {
     const user = await this.findOne(id);
     try {

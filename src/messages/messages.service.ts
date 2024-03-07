@@ -15,7 +15,6 @@ export class MessagesService {
   async create(createMessageDto: CreateMessageDto) {
     try {
       const message = await this.messagesRepo.save({
-        // mailbox,
         ...createMessageDto,
       });
     } catch (error) {
