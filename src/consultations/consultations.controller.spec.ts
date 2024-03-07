@@ -4,14 +4,26 @@ import { CreateConsultationDto } from './dto/create-consultation.dto';
 import { UpdateConsultationDto } from './dto/update-consultation.dto';
 import { setupTestingModule, clearDatabase, createUser, createPatient } from '../utils/testUtils';
 import { Consultation } from './entities/consultation.entity';
-import { User } from '../users/entities/user.entity';
+import { UserRole } from '../users/entities/user.entity';
 import { Patient } from '../patients/entities/patient.entity';
 
 describe('ConsultationsController', () => {
   let controller: ConsultationsController;
   let module: TestingModule;
   let createdConsultation: Consultation;
-  let user: User;
+
+  let user: {
+    id: any;
+    mailbox?: { id: number };
+    email?: string;
+    name?: string;
+    password?: string;
+    role?: UserRole;
+    createdAt?: Date;
+    updatedAt?: Date;
+    patient?: Patient;
+  };
+
   let patient: Patient;
 
   const createConsultationDto: CreateConsultationDto = {

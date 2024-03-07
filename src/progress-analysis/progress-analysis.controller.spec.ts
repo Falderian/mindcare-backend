@@ -7,13 +7,23 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import { setupTestingModule, createUser, clearDatabase } from '../utils/testUtils';
 import { CreateProgressAnalysisDto } from './dto/create-progress-analysis.dto';
 import { UpdateProgressAnalysisDto } from './dto/update-progress-analysis.dto';
-import { User } from '../users/entities/user.entity';
+import { User, UserRole } from '../users/entities/user.entity';
 
 describe('ProgressAnalysisController', () => {
   let controller: ProgressAnalysisController;
   let module: TestingModule;
   let createdAnalysis: ProgressAnalysis;
-  let user: User;
+  let user: {
+    id: any;
+    mailbox?: { id: number };
+    email?: string;
+    name?: string;
+    password?: string;
+    role?: UserRole;
+    createdAt?: Date;
+    updatedAt?: Date;
+    patient?: Patient;
+  };
   let patient: Patient;
 
   const createUserDto: CreateUserDto = {

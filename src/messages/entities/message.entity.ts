@@ -1,6 +1,5 @@
-import { Mailbox } from 'src/mailbox/entities/mailbox.entity';
-import { AfterInsert, AfterUpdate, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { EventEmitter } from 'events';
+import { Mailbox } from '../../mailbox/entities/mailbox.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Message {
@@ -27,18 +26,4 @@ export class Message {
 
   @ManyToOne(() => Mailbox, (mailbox) => mailbox.messages, { nullable: true })
   mailbox: Mailbox;
-
-  @AfterInsert()
-  afterInsert() {
-    console.log('Message inserted, emitting event');
-    messageEventEmitter.emit('messageChange');
-  }
-
-  @AfterUpdate()
-  afterUpdate() {
-    console.log('Message updated, emitting event');
-    messageEventEmitter.emit('messageChange');
-  }
 }
-
-export const messageEventEmitter = new EventEmitter();

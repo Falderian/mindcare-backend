@@ -32,7 +32,7 @@ export class MailboxService {
 
   async findByUser(id: number) {
     try {
-      const mailbox = await this.mailboxesRepo.findOneByOrFail({ user: { id } });
+      const mailbox = await this.mailboxesRepo.findOneOrFail({ where: { user: { id } }, relations: ['user'] });
       return mailbox;
     } catch (error) {
       throw new NotFoundException(error);
@@ -53,7 +53,7 @@ export class MailboxService {
     try {
       const mailbox = await this.findOne(id);
       await this.mailboxesRepo.remove(mailbox);
-      return { message: 'Note removed successfully' };
+      return { message: 'Mailbox removed successfully' };
     } catch (error) {
       throw new BadRequestException(error.message);
     }

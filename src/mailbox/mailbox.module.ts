@@ -1,4 +1,4 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { MailboxService } from './mailbox.service';
 import { MailboxController } from './mailbox.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';

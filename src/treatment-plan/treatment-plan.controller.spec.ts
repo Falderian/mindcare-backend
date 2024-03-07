@@ -5,7 +5,7 @@ import { CreateTreatmentPlanDto } from './dto/create-treatment-plan.dto';
 import { UpdateTreatmentPlanDto } from './dto/update-treatment-plan.dto';
 import { Patient } from '../patients/entities/patient.entity';
 import { UsersService } from '../users/users.service';
-import { User } from '../users/entities/user.entity';
+import { UserRole } from '../users/entities/user.entity';
 import { CreatePatientDto } from '../patients/dto/create-patient.dto';
 import { PatientsService } from '../patients/patients.service';
 import { TreatmentPlan } from './entities/treatment-plan.entity';
@@ -14,7 +14,18 @@ describe('TreatmentPlanController', () => {
   let controller: TreatmentPlanController;
   let module: TestingModule;
   let createdPlan: TreatmentPlan;
-  let user: User;
+  let user: {
+    id: any;
+    mailbox?: { id: number };
+    email?: string;
+    name?: string;
+    password?: string;
+    role?: UserRole;
+    createdAt?: Date;
+    updatedAt?: Date;
+    patient?: Patient;
+  };
+
   let patient: Patient;
 
   const newUser = {

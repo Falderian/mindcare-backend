@@ -5,14 +5,24 @@ import { PatientsService } from '../patients/patients.service';
 import { Patient } from '../patients/entities/patient.entity';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { CreatePatientDto } from '../patients/dto/create-patient.dto';
-import { User } from '../users/entities/user.entity';
+import { User, UserRole } from '../users/entities/user.entity';
 import { setupTestingModule, createUser, clearDatabase } from '../utils/testUtils';
 
 describe('NotesController', () => {
   let controller: NotesController;
   let module: TestingModule;
   let createdNote: Note;
-  let user: User;
+  let user: {
+    id: any;
+    mailbox?: { id: number };
+    email?: string;
+    name?: string;
+    password?: string;
+    role?: UserRole;
+    createdAt?: Date;
+    updatedAt?: Date;
+    patient?: Patient;
+  };
   let patient: Patient;
 
   const newUser = {

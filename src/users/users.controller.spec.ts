@@ -1,12 +1,23 @@
 import { TestingModule } from '@nestjs/testing';
-import { User } from './entities/user.entity';
+import { User, UserRole } from './entities/user.entity';
 import { UsersController } from './users.controller';
 import { clearDatabase, createUser, setupTestingModule } from '../utils/testUtils';
+import { Patient } from '../patients/entities/patient.entity';
 
 describe('UsersController', () => {
   let controller: UsersController;
   let module: TestingModule;
-  let registeredUser: User;
+  let registeredUser: {
+    id: any;
+    mailbox?: { id: number };
+    email?: string;
+    name?: string;
+    password?: string;
+    role?: UserRole;
+    createdAt?: Date;
+    updatedAt?: Date;
+    patient?: Patient;
+  };
 
   beforeAll(async () => {
     module = await setupTestingModule();
