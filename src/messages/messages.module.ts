@@ -3,10 +3,9 @@ import { MessagesService } from './messages.service';
 import { MessagesController } from './messages.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Message } from './entities/message.entity';
-import { MailboxModule } from '../mailbox/mailbox.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Message]), MailboxModule],
+  imports: [TypeOrmModule.forFeature([Message])],
   controllers: [MessagesController],
   providers: [MessagesService],
   exports: [MessagesService],

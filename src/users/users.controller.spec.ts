@@ -1,5 +1,5 @@
 import { TestingModule } from '@nestjs/testing';
-import { User, UserRole } from './entities/user.entity';
+import { UserRole } from './entities/user.entity';
 import { UsersController } from './users.controller';
 import { clearDatabase, createUser, setupTestingModule } from '../utils/testUtils';
 import { Patient } from '../patients/entities/patient.entity';
@@ -9,7 +9,6 @@ describe('UsersController', () => {
   let module: TestingModule;
   let registeredUser: {
     id: any;
-    mailbox?: { id: number };
     email?: string;
     name?: string;
     password?: string;

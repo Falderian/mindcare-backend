@@ -14,7 +14,6 @@ describe('NotesController', () => {
   let createdNote: Note;
   let user: {
     id: any;
-    mailbox?: { id: number };
     email?: string;
     name?: string;
     password?: string;

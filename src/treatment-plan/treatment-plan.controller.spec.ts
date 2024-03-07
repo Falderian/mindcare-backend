@@ -16,7 +16,6 @@ describe('TreatmentPlanController', () => {
   let createdPlan: TreatmentPlan;
   let user: {
     id: any;
-    mailbox?: { id: number };
     email?: string;
     name?: string;
     password?: string;
