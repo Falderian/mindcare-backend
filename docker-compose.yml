@@ -14,28 +14,28 @@ services:
     ports:
       - '${DB_PORT}:${DB_PORT}'
 
-  dev:
-    container_name: mindcare
-    build:
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    ports:
-      - '${SERVER_PORT}:${SERVER_PORT}'
-    depends_on:
-      - db
+  # dev:
+  #   container_name: mindcare
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - .:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   ports:
+  #     - '${SERVER_PORT}:${SERVER_PORT}'
+  #   depends_on:
+  #     - db
 
-  test:
-    container_name: mindcare-test
-    build:
-      context: .
-      dockerfile: Dockerfile.test
-    environment:
-      - NODE_ENV=test
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    depends_on:
-      - db
+  # test:
+  #   container_name: mindcare-test
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.test
+  #   environment:
+  #     - NODE_ENV=test
+  #   volumes:
+  #     - .:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   depends_on:
+  #     - db

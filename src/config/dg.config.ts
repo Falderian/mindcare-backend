@@ -15,12 +15,11 @@ const database = process.env.NODE_ENV === 'test' ? process.env.DB_NAME_TEST : pr
 
 export const DBConfig = TypeOrmModule.forRoot({
   type: 'postgres',
-  host: 'db',
-  port: 5432,
-  database,
-  username: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
+  url: process.env.DB_URL,
   entities: [User, Patient, Note, Task, ProgressAnalysis, TreatmentPlan, Consultation, Message],
   synchronize: true,
   autoLoadEntities: true,
+  ssl: {
+    rejectUnauthorized: false, // Set to true if you have a valid SSL certificate, false for self-signed certificates
+  },
 });
