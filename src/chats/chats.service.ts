@@ -21,5 +21,17 @@ export class ChatsService {
     }
   }
 
-  async findOne(usersId: number[]) {}
+  async findOne(userIds: number[]) {
+    console.log(userIds);
+    const chats = await this.chatsRepo.find({
+      relations: ['users'],
+    });
+    console.log(chats);
+    const matchingChat = chats.find((chat) => {
+      const chatUserIds = chat.users.map((user) => user.id);
+      return userIds.every((userId) => chatUserIds.includes(userId));
+    });
+
+    return matchingChat;
+  }
 }

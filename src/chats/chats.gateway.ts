@@ -11,6 +11,7 @@ import { User } from '../users/entities/user.entity';
 import { Chat } from './entities/chat.entity';
 import { UsersService } from 'src/users/users.service';
 import { ChatsService } from './chats.service';
+import { NotAcceptableException, NotFoundException } from '@nestjs/common';
 
 @WebSocketGateway({
   cors: {
@@ -28,12 +29,22 @@ export class ChatsGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
   @WebSocketServer() server: Server;
 
   @SubscribeMessage('sendMessage')
-  async handleSendMessage(client: Socket, payload: { recipientId: number; message: string }): Promise<void> {
-    const { recipientId, message } = payload;
+  async handleSendMessage(client: Socket, payload: string): Promise<void> {
+    const senderId = +client.handshake.query.userId;
+    console.log(typeof payload);
+    const { recipientId, message } = JSON.parse(payload);
     try {
+      const sender = this.connectedUsers.get(senderId);
+      console.log('Recipient:', recipientId);
       const recipient = await this.usersService.findOne(recipientId);
-      console.log(client.handshake.query.userId);
-    } catch (error) {}
+      if (!recipient) throw new NotFoundException(`There is no recipient user with id ${recipientId}`);
+      const chat = await this.chatsSerrvice.findOne([sender.id, recipient.id]);
+      console.log('Chat:', chat);
+      client.send(chat);
+    } catch (error) {
+      console.log('Error:', error);
+      client.send(error.message);
+    }
   }
 
   afterInit() {
@@ -44,9 +55,7 @@ export class ChatsGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
     const userId = +client.handshake.query.userId;
     try {
       const user = await this.usersService.findOne(userId);
-      console.log(`Connected ${user.email}`);
       this.connectedUsers.set(userId, user);
-      console.log(this.connectedUsers);
     } catch (error) {
       client.send(error.message);
       console.log(`There is no user with id = ${userId}`);
