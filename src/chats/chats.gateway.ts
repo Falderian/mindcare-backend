@@ -29,16 +29,15 @@ export class ChatsGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
   @WebSocketServer() server: Server;
 
   @SubscribeMessage('sendMessage')
-  async handleSendMessage(client: Socket, payload: string): Promise<void> {
+  async handleSendMessage(client: Socket, payload: { recipientId: number; message: string }): Promise<void> {
     const senderId = +client.handshake.query.userId;
-    console.log(typeof payload);
-    const { recipientId, message } = JSON.parse(payload);
+    const { recipientId, message } = payload;
     try {
       const sender = this.connectedUsers.get(senderId);
-      console.log('Recipient:', recipientId);
       const recipient = await this.usersService.findOne(recipientId);
-      if (!recipient) throw new NotFoundException(`There is no recipient user with id ${recipientId}`);
-      const chat = await this.chatsSerrvice.findOne([sender.id, recipient.id]);
+      const usersId = [sender.id, recipient.id];
+      let chat = await this.chatsSerrvice.findOne([sender.id, recipient.id]);
+      if (!chat) chat = await this.chatsSerrvice.createChat(usersId);
       console.log('Chat:', chat);
       client.send(chat);
     } catch (error) {

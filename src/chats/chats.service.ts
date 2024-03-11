@@ -12,21 +12,18 @@ export class ChatsService {
     private usersService: UsersService,
   ) {}
 
-  async createChat(createChatDto: CreateChatDto) {
+  async createChat(usersId: number[]) {
     try {
-      const users = await this.usersService.findManyUsers(createChatDto.usersIds);
-      console.log(users);
+      const users = await this.usersService.findManyUsers(usersId);
     } catch (error) {
       throw new NotFoundException(error.message);
     }
   }
 
   async findOne(userIds: number[]) {
-    console.log(userIds);
     const chats = await this.chatsRepo.find({
       relations: ['users'],
     });
-    console.log(chats);
     const matchingChat = chats.find((chat) => {
       const chatUserIds = chat.users.map((user) => user.id);
       return userIds.every((userId) => chatUserIds.includes(userId));
