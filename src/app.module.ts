@@ -10,7 +10,8 @@ import { TreatmentPlanModule } from './treatment-plan/treatment-plan.module';
 import { ProgressAnalysisModule } from './progress-analysis/progress-analysis.module';
 import { ConsultationsModule } from './consultations/consultations.module';
 import { MessagesModule } from './messages/messages.module';
-import { MailboxModule } from './mailbox/mailbox.module';
+import { ChatsGateway } from './chats/chats.gateway';
+import { ChatsModule } from './chats/chats.module';
 
 @Module({
   imports: [
@@ -24,7 +25,7 @@ import { MailboxModule } from './mailbox/mailbox.module';
     ProgressAnalysisModule,
     ConsultationsModule,
     MessagesModule,
-    MailboxModule,
+    ChatsModule,
   ],
 })
 export class AppModule implements NestModule {

@@ -1,6 +1,6 @@
-import { Mailbox } from '../../mailbox/entities/mailbox.entity';
+import { Chat } from '../../chats/entities/chat.entity';
 import { Patient } from '../../patients/entities/patient.entity';
-import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne, ManyToMany } from 'typeorm';
 
 export enum UserRole {
   Therapist = 'therapist',
@@ -35,7 +35,6 @@ export class User {
   @JoinColumn()
   patient: Patient | null;
 
-  @OneToOne(() => Mailbox, { nullable: false, cascade: true })
-  @JoinColumn()
-  mailbox: Mailbox | null;
+  @ManyToMany(() => Chat, (chat) => chat.users, { cascade: true })
+  chats: Chat[];
 }

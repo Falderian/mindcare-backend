@@ -8,7 +8,6 @@ import { TreatmentPlan } from '../treatment-plan/entities/treatment-plan.entity'
 import { User } from '../users/entities/user.entity';
 import { Consultation } from '../consultations/entities/consultation.entity';
 import { Message } from '../messages/entities/message.entity';
-import { Mailbox } from '../mailbox/entities/mailbox.entity';
 
 config();
 
@@ -16,12 +15,11 @@ const database = process.env.NODE_ENV === 'test' ? process.env.DB_NAME_TEST : pr
 
 export const DBConfig = TypeOrmModule.forRoot({
   type: 'postgres',
-  host: 'db',
-  port: 5432,
-  database,
-  username: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  entities: [User, Patient, Note, Task, ProgressAnalysis, TreatmentPlan, Consultation, Message, Mailbox],
+  url: process.env.DB_URL,
+  entities: [User, Patient, Note, Task, ProgressAnalysis, TreatmentPlan, Consultation, Message],
   synchronize: true,
   autoLoadEntities: true,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });

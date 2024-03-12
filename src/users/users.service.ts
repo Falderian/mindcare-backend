@@ -5,14 +5,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { MailboxService } from '../mailbox/mailbox.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-    private mailboxService: MailboxService,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -33,9 +31,8 @@ export class UsersService {
       });
 
       const createdUser = await this.usersRepository.save(newUser);
-      const mailbox = await this.mailboxService.create(createdUser);
       delete createdUser.password;
-      return { ...createdUser, mailbox };
+      return { ...createdUser };
     } catch (error) {
       throw new BadRequestException(error).message;
     }
@@ -58,6 +55,10 @@ export class UsersService {
     return user;
   }
 
+  async findManyUsers(ids: number[]) {
+    return await Promise.all(ids.map((userId) => this.findOne(userId)));
+  }
+
   async update(id: number, updateUserDto: UpdateUserDto) {
     const user = await this.findOne(id);
     try {
@@ -65,6 +66,7 @@ export class UsersService {
       delete updatedUser.password;
       return updatedUser;
     } catch (error) {
+      console.log(error);
       throw new BadRequestException(error).message;
     }
   }
