@@ -13,7 +13,7 @@ export class Message {
   recipientId: number;
 
   @Column()
-  content: string;
+  message: string;
 
   @Column({ default: false })
   read_status: boolean;

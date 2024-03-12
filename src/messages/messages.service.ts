@@ -17,6 +17,7 @@ export class MessagesService {
       const message = await this.messagesRepo.save({
         ...createMessageDto,
       });
+      return message;
     } catch (error) {
       throw new BadRequestException(error.message);
     }

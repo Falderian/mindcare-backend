@@ -66,6 +66,7 @@ export class UsersService {
       delete updatedUser.password;
       return updatedUser;
     } catch (error) {
+      console.log(error);
       throw new BadRequestException(error).message;
     }
   }

@@ -20,6 +20,6 @@ export const DBConfig = TypeOrmModule.forRoot({
   synchronize: true,
   autoLoadEntities: true,
   ssl: {
-    rejectUnauthorized: false, // Set to true if you have a valid SSL certificate, false for self-signed certificates
+    rejectUnauthorized: false,
   },
 });

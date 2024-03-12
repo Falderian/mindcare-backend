@@ -8,10 +8,9 @@ import {
 } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
 import { User } from '../users/entities/user.entity';
-import { Chat } from './entities/chat.entity';
 import { UsersService } from 'src/users/users.service';
 import { ChatsService } from './chats.service';
-import { NotAcceptableException, NotFoundException } from '@nestjs/common';
+import { MessagesService } from 'src/messages/messages.service';
 
 @WebSocketGateway({
   cors: {
@@ -19,27 +18,26 @@ import { NotAcceptableException, NotFoundException } from '@nestjs/common';
   },
 })
 export class ChatsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
-  connectedUsers: Map<number, User> = new Map();
+  connectedUsers: Map<number, { user: User; socket: Socket }> = new Map();
 
   constructor(
     private readonly usersService: UsersService,
     private readonly chatsSerrvice: ChatsService,
+    private readonly messagesService: MessagesService,
   ) {}
 
   @WebSocketServer() server: Server;
 
   @SubscribeMessage('sendMessage')
-  async handleSendMessage(client: Socket, payload: { recipientId: number; message: string }): Promise<void> {
+  async handleSendMessage(client: Socket, payload: { chatId: number; message: string }): Promise<void> {
     const senderId = +client.handshake.query.userId;
-    const { recipientId, message } = payload;
+    const { chatId, message } = payload;
     try {
-      const sender = this.connectedUsers.get(senderId);
-      const recipient = await this.usersService.findOne(recipientId);
-      const usersId = [sender.id, recipient.id];
-      let chat = await this.chatsSerrvice.findOne([sender.id, recipient.id]);
-      if (!chat) chat = await this.chatsSerrvice.createChat(usersId);
-      console.log('Chat:', chat);
-      client.send(chat);
+      const chat = await this.chatsSerrvice.findChatById(chatId);
+      const recipientId = chat.users.find((user) => user.id !== senderId).id;
+      const newMessage = await this.messagesService.create({ chatId, senderId, recipientId, message });
+      this.notifyUserNewMessage(recipientId);
+      client.send(newMessage);
     } catch (error) {
       console.log('Error:', error);
       client.send(error.message);
@@ -54,7 +52,7 @@ export class ChatsGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
     const userId = +client.handshake.query.userId;
     try {
       const user = await this.usersService.findOne(userId);
-      this.connectedUsers.set(userId, user);
+      this.connectedUsers.set(userId, { user, socket: client });
     } catch (error) {
       client.send(error.message);
       console.log(`There is no user with id = ${userId}`);
@@ -63,6 +61,14 @@ export class ChatsGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
   }
 
   handleDisconnect(client: Socket) {
+    this.connectedUsers.delete(+client.handshake.query.userId);
     client.send('You have been disconnected');
+  }
+
+  notifyUserNewMessage(userId: number) {
+    const isUserConnected = this.connectedUsers.get(userId);
+    if (isUserConnected) {
+      isUserConnected.socket.emit('newMessage', 'You have new message');
+    }
   }
 }

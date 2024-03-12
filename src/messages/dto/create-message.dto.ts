@@ -1,6 +1,10 @@
-import { IsNotEmpty, IsNumber, MinLength } from 'class-validator';
+import { IsNotEmpty, IsNumber, Min, MinLength } from 'class-validator';
+import { Chat } from '../../chats/entities/chat.entity';
 
 export class CreateMessageDto {
+  @IsNotEmpty()
+  chatId: number;
+
   @IsNotEmpty()
   @IsNumber()
   senderId: number;
@@ -11,5 +15,5 @@ export class CreateMessageDto {
 
   @IsNotEmpty()
   @MinLength(10)
-  content: string;
+  message: string;
 }
