@@ -1,24 +1,27 @@
-/*
-  Warnings:
-
-  - You are about to drop the column `first_name` on the `Profile` table. All the data in the column will be lost.
-  - You are about to drop the column `last_name` on the `Profile` table. All the data in the column will be lost.
-  - You are about to drop the column `telegram_id` on the `Profile` table. All the data in the column will be lost.
-
-*/
 -- CreateEnum
 CREATE TYPE "AppointmentMode" AS ENUM ('online', 'offline');
 
 -- CreateEnum
 CREATE TYPE "AppointmentStatus" AS ENUM ('scheduled', 'completed', 'cancelled');
 
--- AlterTable
-ALTER TABLE "Profile" DROP COLUMN "first_name",
-DROP COLUMN "last_name",
-DROP COLUMN "telegram_id",
-ADD COLUMN     "firstName" TEXT,
-ADD COLUMN     "lastName" TEXT,
-ADD COLUMN     "telegramId" TEXT;
+-- CreateTable
+CREATE TABLE "User" (
+    "id" SERIAL NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Profile" (
+    "firstName" TEXT,
+    "lastName" TEXT,
+    "telegramId" TEXT,
+    "userId" INTEGER NOT NULL
+);
 
 -- CreateTable
 CREATE TABLE "Appointment" (
@@ -56,6 +59,12 @@ CREATE TABLE "Note" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Profile_userId_key" ON "Profile"("userId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Appointment_userId_key" ON "Appointment"("userId");
 
 -- CreateIndex
@@ -63,6 +72,9 @@ CREATE UNIQUE INDEX "Recommendation_appointmentId_key" ON "Recommendation"("appo
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Note_appointmentId_key" ON "Note"("appointmentId");
+
+-- AddForeignKey
+ALTER TABLE "Profile" ADD CONSTRAINT "Profile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Appointment" ADD CONSTRAINT "Appointment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
