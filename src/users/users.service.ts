@@ -1,37 +1,39 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { Injectable } from '@nestjs/common';
+import { PrismaErrorHandler } from 'src/prisma/prisma-error.handler';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ProfilesService } from 'src/profiles/profiles.service';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private profilesService: ProfilesService,
+  ) {}
 
   async create(data: CreateUserDto) {
     try {
-      return await this.prisma.user.create({ data });
-    } catch (e) {
-      if (e.code === 'P2002') {
-        throw new BadRequestException(
-          'There is a unique constraint violation, a new user cannot be created with this email',
-        );
-      }
+      const user = await this.prisma.user.create({ data });
+      this.profilesService.create({ userId: user.id });
+      return { id: user.id, email: user.email };
+    } catch (error) {
+      PrismaErrorHandler.handle(error, 'Create User');
     }
   }
 
-  findAll() {
-    return `This action returns all users`;
-  }
-
   async findByEmail(email: string) {
-    return await this.prisma.user.findFirst({ where: { email } });
+    try {
+      return await this.prisma.user.findFirst({ where: { email } });
+    } catch (error) {
+      PrismaErrorHandler.handle(error, 'Find By Email User');
+    }
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    try {
+      return await this.prisma.user.delete({ where: { id } });
+    } catch (error) {
+      PrismaErrorHandler.handle(error, 'Remove User');
+    }
   }
 }
