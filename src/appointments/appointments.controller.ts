@@ -4,14 +4,16 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
-  ParseIntPipe,
+  Query,
   UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from 'src/auth/auth.guard';
 import { AppointmentsService } from './appointments.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { FindAvailableSlotsDto } from './dto/find-available-slots.dto';
 import { UpdateAppointmentDTO } from './dto/update-appointment..dto';
 
 @UseGuards(AuthGuard)
@@ -24,9 +26,11 @@ export class AppointmentsController {
     return this.appointmentsService.create(createAppointmentDto);
   }
 
-  @Get()
-  async findAll() {
-    return this.appointmentsService.findAll();
+  @Get('available-slots')
+  async findAvailableSlots(@Query() query: FindAvailableSlotsDto) {
+    const parsedDate = new Date(query.date);
+
+    return this.appointmentsService.findAvailableSlots(parsedDate);
   }
 
   @Get(':id')

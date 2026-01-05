@@ -32,13 +32,34 @@ export class AppointmentsService {
     });
   }
 
-  async findAll() {
-    return this.prisma.appointment.findMany({
-      include: {
-        note: true,
-        recommendation: true,
+  async findAvailableSlots(date: Date) {
+    const startOfDay = new Date(date);
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date(date);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const appointments = await this.prisma.appointment.findMany({
+      where: {
+        date: {
+          gte: startOfDay,
+          lte: endOfDay,
+        },
       },
     });
+
+    const bookedHours = appointments.map((appt) =>
+      new Date(appt.date).getHours(),
+    );
+
+    const availableHours: number[] = [];
+    for (let hour = 9; hour < 18; hour++) {
+      if (!bookedHours.includes(hour)) {
+        availableHours.push(hour);
+      }
+    }
+
+    return availableHours;
   }
 
   async findOne(id: number) {
