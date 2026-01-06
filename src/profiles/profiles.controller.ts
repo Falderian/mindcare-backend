@@ -7,9 +7,9 @@ import {
   Patch,
   UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '../auth/auth.guard';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { ProfilesService } from './profiles.service';
-import { AuthGuard } from 'src/auth/auth.guard';
 
 UseGuards(AuthGuard);
 @Controller('profiles')

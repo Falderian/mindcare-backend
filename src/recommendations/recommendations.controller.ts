@@ -8,9 +8,9 @@ import {
   Patch,
   UseGuards,
 } from '@nestjs/common';
-import { RecommendationsService } from './recommendations.service';
+import { AuthGuard } from '../auth/auth.guard';
 import { CreateRecommendationDTO } from './dto/create-recommendation.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { RecommendationsService } from './recommendations.service';
 
 UseGuards(AuthGuard);
 @Controller('recommendations')

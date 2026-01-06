@@ -7,7 +7,7 @@ import {
 import {
   PrismaClientKnownRequestError,
   PrismaClientValidationError,
-} from 'generated/prisma/runtime/library';
+} from '../../generated/prisma/runtime/library';
 
 export class PrismaErrorHandler {
   static handle(error: unknown, context: string = 'Operation'): never {

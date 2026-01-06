@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty } from 'class-validator';
-import { AppointmentMode, AppointmentStatus } from 'generated/prisma';
+import { AppointmentMode, AppointmentStatus } from '../../../generated/prisma';
 
 export class UpdateAppointmentDTO {
   @IsNotEmpty()

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaErrorHandler } from 'src/prisma/prisma-error.handler';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { ProfilesService } from 'src/profiles/profiles.service';
+import { PrismaErrorHandler } from '../prisma/prisma-error.handler';
+import { PrismaService } from '../prisma/prisma.service';
+import { ProfilesService } from '../profiles/profiles.service';
 import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()

@@ -1,13 +1,9 @@
-import {
-  IsDate,
-  IsDateString,
-  IsEnum,
-  IsNotEmpty,
-  IsPositive,
-} from 'class-validator';
-import { AppointmentMode } from 'generated/prisma';
+import { IsDateString, IsEnum, IsNotEmpty, IsPositive } from 'class-validator';
+import { Appointment, AppointmentMode } from '../../../generated/prisma';
 
-export class CreateAppointmentDto {
+export class CreateAppointmentDto
+  implements Pick<Appointment, 'mode' | 'userId' | 'date'>
+{
   @IsNotEmpty()
   @IsPositive()
   userId: number;

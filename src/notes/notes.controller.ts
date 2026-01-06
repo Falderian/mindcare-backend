@@ -4,14 +4,13 @@ import {
   Delete,
   Get,
   Param,
-  Patch,
-  Post,
   ParseIntPipe,
+  Patch,
   UseGuards,
 } from '@nestjs/common';
-import { NotesService } from './notes.service';
+import { AuthGuard } from '../auth/auth.guard';
 import { CreateNoteDTO } from './dto/create-note.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { NotesService } from './notes.service';
 
 UseGuards(AuthGuard);
 @Controller('notes')

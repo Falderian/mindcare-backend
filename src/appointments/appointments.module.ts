@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { AppointmentsService } from './appointments.service';
+import { NotesModule } from '../notes/notes.module';
+import { NotesService } from '../notes/notes.service';
+import { PrismaService } from '../prisma/prisma.service';
+import { RecommendationsModule } from '../recommendations/recommendations.module';
+import { RecommendationsService } from '../recommendations/recommendations.service';
 import { AppointmentsController } from './appointments.controller';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { NotesService } from 'src/notes/notes.service';
-import { RecommendationsService } from 'src/recommendations/recommendations.service';
-import { NotesModule } from 'src/notes/notes.module';
-import { RecommendationsModule } from 'src/recommendations/recommendations.module';
+import { AppointmentsService } from './appointments.service';
 
 @Module({
   imports: [NotesModule, RecommendationsModule],
