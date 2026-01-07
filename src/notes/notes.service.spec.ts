@@ -1,16 +1,15 @@
 import { TestingModule } from '@nestjs/testing';
 import { getAppModule } from '../../test/global-setup';
-import { RecommendationsService } from './recommendations.service';
+import { NotesService } from './notes.service';
 
-describe('RecommendationsService', () => {
-  let service: RecommendationsService;
+describe('NotesService', () => {
+  let service: NotesService;
   let app: TestingModule;
-
   const createdIds: number[] = [];
 
   beforeAll(async () => {
     app = await getAppModule();
-    service = app.get(RecommendationsService);
+    service = app.get(NotesService);
   });
 
   afterAll(async () => {
@@ -41,7 +40,6 @@ describe('RecommendationsService', () => {
 
   it('create many and check findAll', async () => {
     const countToCreate = 10;
-
     for (let i = 0; i < countToCreate; i++) {
       const created = await service.create();
       expect(created.id).toBeDefined();

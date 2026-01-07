@@ -21,8 +21,9 @@ export const getAppModule = async () => {
 };
 
 export const closeTestApp = async () => {
-  console.debug('closeTestApp, closeTestApp');
   if (!app) return;
   await app.close();
   app = null as any;
 };
+
+export default initTestApp;
